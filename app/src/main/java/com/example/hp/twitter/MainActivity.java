@@ -6,12 +6,14 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -31,6 +33,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -38,16 +42,34 @@ public class MainActivity extends AppCompatActivity {
     private int RC_SIGN_IN=55;
     private String TAG;
     Toolbar toolbar;
+    int count=0;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseAuth firebaseAuth;
+    DatabaseReference tweetsDatabaseRefrence;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //     toolbar =(Toolbar)findViewById(R.id.toolbar);
+//        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+  //      tweetsDatabaseRefrence=firebaseDatabase.getReference().child("tweets");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         }
+        //FLOATINGACTION BUTTON
+        FloatingActionButton fab=findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),AddTweets.class);
+                startActivity(intent);
+            }
+        });
+
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_search_black_24dp));
@@ -56,56 +78,63 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
-                    home_fragment savedFragment = (home_fragment) getSupportFragmentManager().findFragmentById(R.id.tweetsrecycle);
-                    if (savedFragment == null) {
+                    home_fragment savedFragment = new home_fragment();
 
-                        home_fragment mainFragment = new home_fragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.add(R.id.tweetsrecycle, mainFragment);
-                        fragmentTransaction.commit();
+
+                    if (count == 0) {
+
+                        count = 1;
+
+                        fragmentManager.beginTransaction().add(R.id.tweetsrecycle, savedFragment).commit();
+
                     }
-                } else if (tabLayout.getSelectedTabPosition() == 1) {
+                    else
+                    {
+
+                        fragmentManager.beginTransaction().replace(R.id.tweetsrecycle, savedFragment).commit();
+
+                    }
+
+
+                }
+                else if (tabLayout.getSelectedTabPosition() == 1)
+                {
+
+
                     Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
-                    search_fregment sFragment = (search_fregment) getSupportFragmentManager().findFragmentById(R.id.tweetsrecycle);
-                    if (sFragment == null) {
 
-                        search_fregment searchFragment = new search_fregment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.add(R.id.tweetsrecycle, searchFragment);
-                        fragmentTransaction.commit();
-                    }                    }
-                    else if (tabLayout.getSelectedTabPosition() == 2) {
-                        Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_SHORT).show();
-                        chat_fragment cFragment = (chat_fragment) getSupportFragmentManager().findFragmentById(R.id.tweetsrecycle);
-                    if (cFragment == null) {
+                    search_fregment sFragment = new search_fregment();
 
-                        chat_fragment chatFragment = new chat_fragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.add(R.id.tweetsrecycle, chatFragment);
-                        fragmentTransaction.commit();
-                    }
+                    fragmentManager.beginTransaction().replace(R.id.tweetsrecycle, sFragment).commit();
+
+
                 }
-                    else if (tabLayout.getSelectedTabPosition() == 3) {
-                        Toast.makeText(getApplicationContext(), "Notification", Toast.LENGTH_SHORT).show();
-                    notification_fragment nFragment = (notification_fragment) getSupportFragmentManager().findFragmentById(R.id.tweetsrecycle);
-                    if (nFragment == null) {
-                        notification_fragment notificationFragment = new notification_fragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.add(R.id.tweetsrecycle, notificationFragment);
-                        fragmentTransaction.commit();
-                    }
-                    }
+                else if (tabLayout.getSelectedTabPosition() == 2)
+                {
+
+
+                    Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_SHORT).show();
+
+                    chat_fragment cFragment = new chat_fragment();
+
+                    fragmentManager.beginTransaction().replace(R.id.tweetsrecycle, cFragment).commit();
+
+                } else if (tabLayout.getSelectedTabPosition() == 3) {
+
+                    Toast.makeText(getApplicationContext(), "Notification", Toast.LENGTH_SHORT).show();
+                    notification_fragment nFragment = new notification_fragment();
+                    fragmentManager.beginTransaction().replace(R.id.tweetsrecycle, nFragment).commit();
 
                 }
 
-                @Override
-                public void onTabUnselected (TabLayout.Tab tab){
+            }
+
+            @Override
+
+            public void onTabUnselected (TabLayout.Tab tab){
 
                 }
 

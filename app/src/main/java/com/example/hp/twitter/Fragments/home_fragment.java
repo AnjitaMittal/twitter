@@ -16,7 +16,7 @@ public class home_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
        getActivity().setTitle("Home");
-       View view=inflater.inflate(R.layout.home_items,container,false);
+       View view=inflater.inflate(R.layout.universal_recyclerview,container,false);
         RecyclerView recyclerView=view.findViewById(R.id.recyclerView);
        HomeAdapter homeAdapter=new HomeAdapter();
        recyclerView.setAdapter(homeAdapter);
