@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.hp.twitter.Fragments.HomeAdapter;
 import com.example.hp.twitter.Fragments.chat_fragment;
 import com.example.hp.twitter.Fragments.home_fragment;
 import com.example.hp.twitter.Fragments.notification_fragment;
@@ -33,8 +34,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -45,8 +52,11 @@ public class MainActivity extends AppCompatActivity {
     int count=0;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth firebaseAuth;
-    DatabaseReference tweetsDatabaseRefrence;
-
+   private DatabaseReference tweetsDatabaseRefrence;
+    private ChildEventListener childEventListener;
+    private String username="de";
+ HomeAdapter homeAdapter;
+    home_fragment savedFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //getSupportActionBar().setCustomView(R.layout.layout_custom_action_bar);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
@@ -81,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 if (tabLayout.getSelectedTabPosition() == 0) {
                     Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
-                    home_fragment savedFragment = new home_fragment();
+                    savedFragment = new home_fragment();
 
 
                     if (count == 0) {
@@ -167,5 +178,31 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+    private void onSignedInInitialize(String username) {
+        this.username = username;
+        attachDatabaseReadListener();
+    }
 
+    private void attachDatabaseReadListener() {
+        homeAdapter.messages=new ArrayList<>();
+        if (childEventListener == null) {
+            childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.i(TAG, "getting data from firebase");
+                    Tweets message = dataSnapshot.getValue(Tweets.class);
+                     homeAdapter.messages.add(message);
+                     savedFragment.update(homeAdapter.messages);
+                    homeAdapter.notifyDataSetChanged();
+                }
+
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+                public void onCancelled(DatabaseError databaseError) {}
+            };
+            tweetsDatabaseRefrence.addChildEventListener(childEventListener);
+        }
+
+    }
 }
