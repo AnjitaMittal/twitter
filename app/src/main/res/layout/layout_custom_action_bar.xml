@@ -5,6 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize">
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 88637f8849c0e60c714dc1f8d40f989fef86c670
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -16,6 +21,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88637f8849c0e60c714dc1f8d40f989fef86c670
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -29,5 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 88637f8849c0e60c714dc1f8d40f989fef86c670
 </android.support.constraint.ConstraintLayout>
