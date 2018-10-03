@@ -1,14 +1,14 @@
 package com.example.hp.twitter;
 
-public class tweets {
+public class Tweets {
     private String tweet;
     private String user;
     private String photoUrl;
 
-    public tweets() {
+    public Tweets() {
     }
 
-    public tweets(String message, String author, String photoUrl) {
+    public Tweets(String message, String author, String photoUrl) {
         this.tweet = message;
         this.user = author;
         this.photoUrl = photoUrl;

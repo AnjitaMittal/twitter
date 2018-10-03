@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //     toolbar =(Toolbar)findViewById(R.id.toolbar);
-//        firebaseDatabase = FirebaseDatabase.getInstance();
+       firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-  //      tweetsDatabaseRefrence=firebaseDatabase.getReference().child("tweets");
+        tweetsDatabaseRefrence=firebaseDatabase.getReference().child("Tweets");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
