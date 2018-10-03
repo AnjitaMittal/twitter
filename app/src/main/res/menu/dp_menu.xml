@@ -5,7 +5,9 @@
     <item
         android:id="@+id/dp"
         android:title="Alerts"
+
         android:scaleType="centerInside"
         app:actionLayout="@layout/dp"
-    app:showAsAction="ifRoom"/>
+        android:orderInCategory="100"
+    app:showAsAction="always"/>
 </menu>
