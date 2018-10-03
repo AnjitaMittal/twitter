@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getSupportActionBar().setCustomView(R.layout.layout_custom_action_bar);
+
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_black_24dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_search_black_24dp));
